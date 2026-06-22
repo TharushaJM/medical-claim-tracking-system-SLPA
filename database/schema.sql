@@ -8,14 +8,14 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema medical_claim_tracking_system_slpa
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema medical_claim_tracking_system_slpa
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
-USE `mydb` ;
+CREATE SCHEMA IF NOT EXISTS `medical_claim_tracking_system_slpa` DEFAULT CHARACTER SET utf8 ;
+USE `medical_claim_tracking_system_slpa` ;
 
 -- -----------------------------------------------------
 -- Table `xd_divisions`
@@ -23,7 +23,7 @@ USE `mydb` ;
 DROP TABLE IF EXISTS `xd_divisions` ;
 
 CREATE TABLE IF NOT EXISTS `xd_divisions` (
-  `div_code` INT NOT NULL,
+  `div_code` INT NOT NULL AUTO_INCREMENT,
   `division_name` VARCHAR(100) NULL,
   PRIMARY KEY (`div_code`))
 ENGINE = InnoDB;
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `xd_employees` (
   `balance_opd_amount` DOUBLE NULL DEFAULT 10000,
   `balance_specs_amount` DOUBLE NULL DEFAULT 10000,
   PRIMARY KEY (`e_id`),
-  INDEX `fk_xd_employees_xd_divisions1_idx` (`division_code` ASC) VISIBLE,
+  INDEX `fk_xd_employees_xd_divisions1_idx` (`division_code` ASC) ,
   CONSTRAINT `fk_xd_employees_xd_divisions1`
     FOREIGN KEY (`division_code`)
     REFERENCES `xd_divisions` (`div_code`)
@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `xd_dependants` (
   `dob` DATE NULL,
   `document_received` INT NULL,
   PRIMARY KEY (`d_id`),
-  INDEX `fk_xd_dependants_xd_employees_idx` (`xd_employees_e_id` ASC) VISIBLE,
+  INDEX `fk_xd_dependants_xd_employees_idx` (`xd_employees_e_id` ASC) ,
   CONSTRAINT `fk_xd_dependants_xd_employees`
     FOREIGN KEY (`xd_employees_e_id`)
     REFERENCES `xd_employees` (`e_id`)
@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS `xd_claim_requests` (
   `claim_type` ENUM('opd', 'specs') NULL,
   `patient_name` VARCHAR(100) NULL,
   `emp_computer_number` VARCHAR(20) NULL,
-  `is_ducument_received` INT NULL DEFAULT 0,
+  `is_document_received` INT NULL DEFAULT 0,
   `document_received_date` DATETIME NULL,
   `invoice_number` VARCHAR(45) NULL,
   `medical_recommendation` VARCHAR(45) NULL,
@@ -152,10 +152,10 @@ CREATE TABLE IF NOT EXISTS `xd_claim_history_log` (
   `old_status_id` INT NOT NULL,
   `new_status_id` INT NOT NULL,
   PRIMARY KEY (`log_id`),
-  INDEX `fk_xd_claim_history_log_xd_claim_requests1_idx` (`claim_requests_id` ASC) VISIBLE,
-  INDEX `fk_xd_claim_history_log_xsu_system_users1_idx` (`updated_by` ASC) VISIBLE,
-  INDEX `fk_xd_claim_history_log_xd_statuses1_idx` (`old_status_id` ASC) VISIBLE,
-  INDEX `fk_xd_claim_history_log_xd_statuses2_idx` (`new_status_id` ASC) VISIBLE,
+  INDEX `fk_xd_claim_history_log_xd_claim_requests1_idx` (`claim_requests_id` ASC) ,
+  INDEX `fk_xd_claim_history_log_xsu_system_users1_idx` (`updated_by` ASC) ,
+  INDEX `fk_xd_claim_history_log_xd_statuses1_idx` (`old_status_id` ASC) ,
+  INDEX `fk_xd_claim_history_log_xd_statuses2_idx` (`new_status_id` ASC) ,
   CONSTRAINT `fk_xd_claim_history_log_xd_claim_requests1`
     FOREIGN KEY (`claim_requests_id`)
     REFERENCES `xd_claim_requests` (`r_id`)
