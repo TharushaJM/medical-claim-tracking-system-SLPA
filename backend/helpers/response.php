@@ -1,7 +1,7 @@
 <?php
 
-function sendJsonResponse($success, $message, $data = null, $statusCode = 200) {
-    http_response_code($statusCode);
+function send_json($success, $message, $data = null, $status_code = 200) {
+    http_response_code($status_code);
     header("Content-Type: application/json");
 
     echo json_encode([

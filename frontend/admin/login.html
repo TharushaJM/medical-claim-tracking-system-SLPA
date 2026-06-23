@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLPA Wellness Center Admin Login</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="admin-login-page">
+
+    <main class="admin-login-wrapper">
+        <section class="admin-login-top">
+            <div class="admin-login-logo">SLPA</div>
+
+            <h1 class="admin-login-title">Wellness Center Admin</h1>
+            <p class="admin-login-subtitle">Sign in to manage medical claims</p>
+        </section>
+
+        <section class="admin-login-card">
+            <form class="admin-login-form" id="adminLoginForm">
+                <div class="admin-form-group">
+                    <label for="adminUsername" class="admin-login-label">USERNAME</label>
+                    <input 
+                        type="text" 
+                        id="adminUsername" 
+                        class="admin-login-input" 
+                        placeholder="admin"
+                    >
+                </div>
+
+                <div class="admin-form-group">
+                    <label for="adminPassword" class="admin-login-label">PASSWORD</label>
+                    <input 
+                        type="password" 
+                        id="adminPassword" 
+                        class="admin-login-input" 
+                        placeholder="••••••••"
+                    >
+                </div>
+
+                <button type="submit" class="admin-login-button">Login</button>
+
+                <p class="admin-login-note">
+                    Authorized personnel only. Sample preview — any credentials work.
+                </p>
+
+                <div id="loginError" class="admin-error-message"></div>
+            </form>
+        </section>
+    </main>
+
+    <script src="../assets/js/admin.js"></script>
+</body>
+</html>
