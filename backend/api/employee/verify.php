@@ -20,8 +20,12 @@ $input = json_decode(file_get_contents("php://input"), true);
 $computerNumber = trim($input["computer_number"] ?? "");
 $nic = trim($input["nic"] ?? "");
 
-if ($computerNumber === "" || $nic === "") {
-    sendJsonResponse(false, "Computer number and NIC are required", null, 400);
+if ($computerNumber === "") {
+    sendJsonResponse(false, "Computer number is required", null, 400);
+}
+
+if ($nic === "") {
+    sendJsonResponse(false, "NIC number is required", null, 400);
 }
 
 try {
