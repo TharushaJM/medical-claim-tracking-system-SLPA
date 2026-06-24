@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Admin Dashboard – Wellness Center Medical Claim Registration and Tracking System for Sri Lanka Port Employees.">
+    <title>Admin Dashboard | SLPA Wellness Center</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Admin Stylesheet -->
+    <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body>
+
+<div class="admin-app">
+
+    <!-- ========================================
+         SIDEBAR
+         ======================================== -->
+    <aside class="sidebar" id="sidebar">
+
+        <!-- Brand -->
+        <div class="sidebar-brand">
+            <div class="brand-name">⚕️ SLPA Wellness</div>
+            <div class="brand-role">Admin Console</div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">Main Menu</div>
+
+            <button class="nav-item active" id="nav-dashboard" data-page="dashboard">
+                <span class="nav-icon">📊</span>
+                Dashboard
+            </button>
+
+            <button class="nav-item" id="nav-claims" data-page="claims">
+                <span class="nav-icon">📋</span>
+                All Claims
+            </button>
+
+            <button class="nav-item" id="nav-details" data-page="details">
+                <span class="nav-icon">🔍</span>
+                Claim Details
+            </button>
+
+            <div class="nav-section-label" style="margin-top:8px;">Management</div>
+
+            <button class="nav-item" id="nav-reports" data-page="reports">
+                <span class="nav-icon">📈</span>
+                Reports
+            </button>
+
+            <button class="nav-item" id="nav-settings" data-page="settings">
+                <span class="nav-icon">⚙️</span>
+                Settings
+            </button>
+        </nav>
+
+        <!-- Logout -->
+        <div class="sidebar-footer">
+            <button class="nav-item" id="logoutBtn">
+                <span class="nav-icon">🚪</span>
+                Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- Sidebar mobile overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ========================================
+         MAIN AREA
+         ======================================== -->
+    <div class="main-area">
+
+        <!-- ---- TOP NAVBAR ---- -->
+        <header class="topbar">
+            <!-- Mobile hamburger -->
+            <button class="topbar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+
+            <!-- Page title -->
+            <span class="topbar-title" id="topbarTitle">Admin Dashboard</span>
+
+            <!-- Search bar -->
+            <div class="topbar-search">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="topbarSearch" placeholder="Quick search…" autocomplete="off">
+            </div>
+
+            <!-- Action icons -->
+            <div class="topbar-actions">
+                <button class="topbar-icon-btn" title="Notifications" aria-label="Notifications">
+                    🔔
+                    <span class="notif-badge">3</span>
+                </button>
+                <button class="topbar-icon-btn" title="Refresh data" id="refreshBtn" aria-label="Refresh">🔄</button>
+            </div>
+
+            <!-- Profile -->
+            <div class="topbar-profile" id="profileBtn" title="Admin profile">
+                <div class="topbar-avatar">A</div>
+                <div class="topbar-profile-text">
+                    <div class="profile-name">Welcome, Admin</div>
+                    <div class="profile-role">Wellness Admin</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- ---- DASHBOARD CONTENT ---- -->
+        <main class="dashboard-content" id="dashboardContent">
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1>Dashboard</h1>
+                <p>Wellness Center Admin Dashboard</p>
+            </div>
+
+            <!-- ===== STAT CARDS ROW 1 ===== -->
+            <!-- Cards rendered by JS below; placeholder grids declared here -->
+            <div class="stats-grid" id="statsRow1">
+                <!-- JS injects 5 cards: Total, Submitted, Received Document, Document Needed, Submitted to Doctor -->
+            </div>
+
+            <!-- ===== STAT CARDS ROW 2 ===== -->
+            <div class="stats-grid row2" id="statsRow2">
+                <!-- JS injects 5 cards: Approved by Doctor, Rejected by Doctor, Payment Approved, Paid, Total Paid Amount -->
+            </div>
+
+            <!-- ===== QUICK SEARCH ===== -->
+            <div class="section-card">
+                <div class="section-header">
+                    <div class="section-header-left">
+                        <h2>Quick Search</h2>
+                        <p>Find a claim by Reference Number, Computer Number, or NIC. Refine by status, type, division, or OPD date range.</p>
+                    </div>
+                </div>
+
+                <div class="search-section">
+                    <!-- Row 1: Main search + Status + Type -->
+                    <div class="search-row-1">
+                        <div class="search-field">
+                            <label for="searchRef">Reference / Computer No / NIC</label>
+                            <input type="text" class="search-input" id="searchRef" placeholder="Reference / Computer No / NIC">
+                        </div>
+                        <div class="search-field">
+                            <label for="searchStatus">Status</label>
+                            <select class="search-select" id="searchStatus">
+                                <option value="">All Statuses</option>
+                                <option value="Submitted">Submitted</option>
+                                <option value="Received Document">Received Document</option>
+                                <option value="Document Needed">Document Needed</option>
+                                <option value="Submitted to Doctor">Submitted to Doctor</option>
+                                <option value="Approved by Doctor">Approved by Doctor</option>
+                                <option value="Rejected by Doctor">Rejected by Doctor</option>
+                                <option value="Payment Approved">Payment Approved</option>
+                                <option value="Paid">Paid</option>
+                            </select>
+                        </div>
+                        <div class="search-field">
+                            <label for="searchType">Type</label>
+                            <select class="search-select" id="searchType">
+                                <option value="">All Types</option>
+                                <option value="OPD">OPD</option>
+                                <option value="Spectacles">Spectacles</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Division + Date From + Date To -->
+                    <div class="search-row-2">
+                        <div class="search-field">
+                            <label for="searchDivision">Division</label>
+                            <select class="search-select" id="searchDivision">
+                                <option value="">All Divisions</option>
+                                <option value="Operations">Operations</option>
+                                <option value="Engineering">Engineering</option>
+                                <option value="Finance">Finance</option>
+                                <option value="HR">Human Resources</option>
+                                <option value="Medical">Medical</option>
+                            </select>
+                        </div>
+                        <div class="search-field">
+                            <label for="searchDateFrom">OPD Date From</label>
+                            <input type="date" class="search-date-input" id="searchDateFrom">
+                        </div>
+                        <div class="search-field">
+                            <label for="searchDateTo">OPD Date To</label>
+                            <input type="date" class="search-date-input" id="searchDateTo">
+                        </div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="search-btn-row">
+                        <button class="btn-search" id="searchBtn">🔍 Open in All Claims</button>
+                        <button class="btn-reset" id="resetBtn">Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== RECENT CLAIMS TABLE ===== -->
+            <div class="section-card">
+                <div class="section-header">
+                    <div class="section-header-left">
+                        <h2>Recent Claims</h2>
+                        <p>Latest submitted claims across all statuses</p>
+                    </div>
+                    <button class="view-all-link" id="viewAllRecentBtn">View all →</button>
+                </div>
+                <div class="table-wrap">
+                    <table id="recentClaimsTable">
+                        <thead>
+                            <tr>
+                                <th>Reference No</th>
+                                <th>Computer No</th>
+                                <th>Employee Name</th>
+                                <th>Claim Type</th>
+                                <th>OPD Date</th>
+                                <th class="th-right">Amount</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentClaimsTbody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ===== CLAIMS NEEDING ACTION TABLE ===== -->
+            <div class="section-card">
+                <div class="section-header">
+                    <div class="section-header-left">
+                        <h2>Claims Needing Action</h2>
+                        <p>Submitted · Document Needed · Payment Approved</p>
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <table id="actionClaimsTable">
+                        <thead>
+                            <tr>
+                                <th>Reference No</th>
+                                <th>Computer No</th>
+                                <th>Employee Name</th>
+                                <th>OPD Date</th>
+                                <th class="th-right">Amount</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="actionClaimsTbody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ===== CHARTS ROW ===== -->
+            <div class="charts-grid">
+
+                <!-- Bar Chart – Claims by Status -->
+                <div class="section-card">
+                    <div class="chart-container">
+                        <div class="chart-title">📊 Claims by Status</div>
+                        <div class="bar-chart" id="statusBarChart">
+                            <!-- Rendered by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Donut Chart – OPD vs Spectacles -->
+                <div class="section-card">
+                    <div class="chart-container">
+                        <div class="chart-title">🍩 Claim Type Breakdown</div>
+                        <div class="donut-wrap">
+                            <div class="donut-chart">
+                                <svg class="donut-svg" viewBox="0 0 100 100" id="donutSvg">
+                                    <!-- Rendered by JS -->
+                                </svg>
+                                <div class="donut-center">
+                                    <span class="donut-center-val" id="donutTotal">0</span>
+                                    <span class="donut-center-sub">Total</span>
+                                </div>
+                            </div>
+                            <div class="donut-legend" id="donutLegend">
+                                <!-- Rendered by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ===== PAYMENT SUMMARY ===== -->
+            <div class="section-card" style="margin-bottom:10px;">
+                <div class="section-header">
+                    <div class="section-header-left">
+                        <h2>💰 Payment Summary</h2>
+                    </div>
+                </div>
+                <div class="payment-summary">
+                    <div class="payment-stat-row" id="paymentSummaryRow">
+                        <!-- Rendered by JS -->
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div><!-- /main-area -->
+</div><!-- /admin-app -->
+
+
+<!-- ========== LOGOUT CONFIRM MODAL ========== -->
+<div class="modal-overlay" id="logoutModal" role="dialog" aria-modal="true" aria-labelledby="logoutModalTitle">
+    <div class="modal-box">
+        <span class="modal-icon">🚪</span>
+        <div class="modal-title" id="logoutModalTitle">Confirm Logout</div>
+        <p class="modal-msg">Are you sure you want to logout from the admin panel?</p>
+        <div class="modal-btn-row">
+            <button class="btn-modal btn-modal-danger" id="confirmLogoutBtn">Yes, Logout</button>
+            <button class="btn-modal btn-modal-outline" id="cancelLogoutBtn">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- ========== VIEW CLAIM MODAL ========== -->
+<div class="modal-overlay" id="viewClaimModal" role="dialog" aria-modal="true" aria-labelledby="viewClaimModalTitle">
+    <div class="modal-box" style="max-width:520px; text-align:left;">
+        <div class="modal-title" id="viewClaimModalTitle" style="text-align:center;">Claim Details</div>
+        <div id="viewClaimModalBody" style="margin-bottom:20px; font-size:13.5px; line-height:2; color:#475569;">
+            <!-- Populated by JS -->
+        </div>
+        <div class="modal-btn-row">
+            <button class="btn-modal btn-modal-outline" id="closeViewClaimModal">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- ========== SEARCH RESULT MODAL ========== -->
+<div class="modal-overlay" id="searchResultModal" role="dialog" aria-modal="true" aria-labelledby="searchResultModalTitle">
+    <div class="modal-box" style="max-width:540px;">
+        <span class="modal-icon" id="searchResultIcon">🔍</span>
+        <div class="modal-title" id="searchResultModalTitle">Search Results</div>
+        <p class="modal-msg" id="searchResultMsg"></p>
+        <div class="modal-btn-row">
+            <button class="btn-modal btn-modal-primary" id="closeSearchResultModal">OK</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- Admin JS -->
+<script src="../assets/js/admin.js?v=20260624-login-fix-2"></script>
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claim Details | SLPA Wellness</title>
+    <script>
+        if (window.location.port === "5500") window.location.replace("http://127.0.0.1/medical-claim-tracking-system-SLPA/frontend/admin/claim-details.html");
+    </script>
+    <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body>
+<div class="admin-app" id="claimDetailsPage">
+    <div class="main-area" style="margin-left:0; width:100%;">
+        <header class="topbar"><span class="topbar-title">Claim Details</span><div class="topbar-actions"><a class="view-all-link" href="claims.html">← All Claims</a></div><div class="topbar-profile"><div class="topbar-avatar">A</div><div class="topbar-profile-text"><div class="profile-name">Welcome, Admin</div><div class="profile-role">Wellness Admin</div></div></div></header>
+        <main class="dashboard-content">
+            <div class="page-header"><h1 id="claimDetailsTitle">Claim Details</h1><p id="claimDetailsError" style="color:#dc2626;"></p></div>
+            <div class="section-card"><div class="section-header"><div class="section-header-left"><h2>Claim Information</h2></div></div><div class="table-wrap"><table><tbody id="claimDetailsBody"><tr><td>Loading…</td></tr></tbody></table></div></div>
+            <div class="section-card"><div class="section-header"><div class="section-header-left"><h2>Status History</h2></div></div><div class="table-wrap"><table><thead><tr><th>Previous Status</th><th>New Status</th><th>Remarks</th><th>Updated By</th><th>Updated At</th></tr></thead><tbody id="historyBody"><tr><td colspan="5" class="empty-state">Loading…</td></tr></tbody></table></div></div>
+        </main>
+    </div>
+</div>
+<script src="../assets/js/admin.js?v=20260624-login-fix-2"></script>
+</body>
+</html>
