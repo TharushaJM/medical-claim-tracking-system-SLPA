@@ -7,75 +7,41 @@ require_once "../../helpers/auth.php";
 require_admin_login();
 
 try {
-    $totalStmt = $conn->query("SELECT COUNT(*) AS total_claims FROM medical_claims");
-    $totalClaims = $totalStmt->fetch(PDO::FETCH_ASSOC)["total_claims"];
+    $totalClaims = (int) $conn->query("SELECT COUNT(*) FROM xd_claim_requests")->fetchColumn();
+    $statusCounts = $conn->query(
+        "SELECT s.s_id AS status_id, s.status_name, s.status_order, COUNT(r.r_id) AS total
+         FROM xd_statuses s
+         LEFT JOIN xd_claim_requests r ON r.status = s.status_name
+         GROUP BY s.s_id, s.status_name, s.status_order
+         ORDER BY s.status_order, s.s_id"
+    )->fetchAll(PDO::FETCH_ASSOC);
 
-    $statusStmt = $conn->query("
-        SELECT 
-            cs.status_id,
-            cs.status_name,
-            COUNT(mc.claim_id) AS total
-        FROM claim_statuses cs
-        LEFT JOIN medical_claims mc ON mc.current_status_id = cs.status_id
-        GROUP BY cs.status_id, cs.status_name
-        ORDER BY cs.status_order ASC
-    ");
+    $paymentSummary = $conn->query(
+        "SELECT
+            COALESCE(SUM(CASE WHEN status = 'Paid' THEN COALESCE(approved_amount, amount_requested, 0) ELSE 0 END), 0) AS total_paid_amount,
+            COALESCE(SUM(CASE WHEN status = 'Payment Approved' THEN COALESCE(approved_amount, amount_requested, 0) ELSE 0 END), 0) AS pending_payment_amount,
+            COALESCE(SUM(CASE WHEN status IN ('Approved by Doctor', 'Payment Approved', 'Paid') THEN COALESCE(approved_amount, amount_requested, 0) ELSE 0 END), 0) AS total_approved_amount
+         FROM xd_claim_requests"
+    )->fetch(PDO::FETCH_ASSOC);
 
-    $statusCounts = $statusStmt->fetchAll(PDO::FETCH_ASSOC);
-
-    $paidStmt = $conn->query("
-        SELECT COALESCE(SUM(approved_amount), 0) AS total_paid_amount
-        FROM medical_claims mc
-        INNER JOIN claim_statuses cs ON mc.current_status_id = cs.status_id
-        WHERE cs.status_name = 'Paid'
-    ");
-
-    $totalPaidAmount = $paidStmt->fetch(PDO::FETCH_ASSOC)["total_paid_amount"];
-
-    $recentStmt = $conn->query("
-        SELECT 
-            mc.claim_id,
-            mc.reference_no,
-            e.computer_no,
-            e.full_name,
-            mc.amount_requested,
-            mc.claim_type,
-            cs.status_name,
-            mc.created_at
-        FROM medical_claims mc
-        INNER JOIN employees e ON mc.employee_id = e.employee_id
-        INNER JOIN claim_statuses cs ON mc.current_status_id = cs.status_id
-        ORDER BY mc.created_at DESC
-        LIMIT 5
-    ");
-
-    $recentClaims = $recentStmt->fetchAll(PDO::FETCH_ASSOC);
-
-    $actionStmt = $conn->query("
-        SELECT 
-            mc.claim_id,
-            mc.reference_no,
-            e.full_name,
-            cs.status_name,
-            mc.latest_remark
-        FROM medical_claims mc
-        INNER JOIN employees e ON mc.employee_id = e.employee_id
-        INNER JOIN claim_statuses cs ON mc.current_status_id = cs.status_id
-        WHERE cs.status_name IN ('Submitted', 'Document Needed', 'Submitted to Doctor', 'Payment Approved')
-        ORDER BY mc.updated_at DESC
-        LIMIT 5
-    ");
-
-    $claimsNeedingAction = $actionStmt->fetchAll(PDO::FETCH_ASSOC);
+    $claimSelect = "SELECT r.r_id AS claim_id, r.reference AS reference_no, r.emp_computer_number AS computer_no,
+        CONCAT_WS(' ', e.initials, e.surname) AS employee_name, r.opd_date, r.amount_requested,
+        r.claim_type, r.status AS status_name, r.created_at, r.updated_at
+        FROM xd_claim_requests r
+        LEFT JOIN xd_employees e ON e.computer_number = r.emp_computer_number";
+    $recentClaims = $conn->query("{$claimSelect} ORDER BY COALESCE(r.created_at, r.updated_at) DESC, r.r_id DESC LIMIT 8")->fetchAll(PDO::FETCH_ASSOC);
+    $claimsNeedingAction = $conn->query("{$claimSelect} WHERE r.status IN ('Submitted', 'Document Needed', 'Payment Approved') ORDER BY COALESCE(r.updated_at, r.created_at) DESC, r.r_id DESC LIMIT 8")->fetchAll(PDO::FETCH_ASSOC);
+    $typeCounts = $conn->query("SELECT claim_type, COUNT(*) AS total FROM xd_claim_requests GROUP BY claim_type")->fetchAll(PDO::FETCH_ASSOC);
 
     send_json(true, "Dashboard data loaded", [
         "total_claims" => $totalClaims,
         "status_counts" => $statusCounts,
-        "total_paid_amount" => $totalPaidAmount,
+        "total_paid_amount" => (float) $paymentSummary["total_paid_amount"],
+        "payment_summary" => $paymentSummary,
         "recent_claims" => $recentClaims,
-        "claims_needing_action" => $claimsNeedingAction
+        "claims_needing_action" => $claimsNeedingAction,
+        "claim_type_counts" => $typeCounts
     ]);
-
 } catch (PDOException $e) {
-    send_json(false, "Failed to load dashboard", $e->getMessage(), 500);
+    send_json(false, "Failed to load dashboard", null, 500);
 }

@@ -1,7 +1,7 @@
 <?php
 
 $host = "localhost";
-$db_name = "slpa_medical_claim_system";
+$db_name = "medical_claim_tracking_system_slpa";
 $username = "root";
 $password = "";
 

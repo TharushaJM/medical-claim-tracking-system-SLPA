@@ -5,78 +5,43 @@ require_once "../../helpers/response.php";
 require_once "../../helpers/auth.php";
 
 require_admin_login();
-
-$claim_id = isset($_GET["claim_id"]) ? (int) $_GET["claim_id"] : 0;
-
-if ($claim_id <= 0) {
+$claimId = (int) ($_GET["claim_id"] ?? 0);
+if ($claimId <= 0) {
     send_json(false, "Valid claim ID is required", null, 400);
 }
 
 try {
-    $stmt = $conn->prepare("
-        SELECT 
-            mc.*,
-            e.computer_no,
-            e.nic,
-            e.full_name,
-            e.designation,
-            e.division,
-            e.section,
-            e.telephone,
-            cs.status_name AS current_status_name
-        FROM medical_claims mc
-        INNER JOIN employees e ON mc.employee_id = e.employee_id
-        INNER JOIN claim_statuses cs ON mc.current_status_id = cs.status_id
-        WHERE mc.claim_id = :claim_id
-        LIMIT 1
-    ");
-
-    $stmt->execute([
-        ":claim_id" => $claim_id
-    ]);
-
-    $claim = $stmt->fetch(PDO::FETCH_ASSOC);
-
+    $claimStmt = $conn->prepare(
+        "SELECT r.r_id AS claim_id, r.reference AS reference_no, r.opd_date, r.amount_requested, r.claim_type,
+            r.patient_name, r.emp_computer_number AS computer_no, r.is_document_received, r.document_received_date,
+            r.invoice_number, r.medical_recommendation, r.medical_remark, r.doctor_approved_date,
+            r.approved_amount, r.payment_approved_date, r.paid_date, r.created_at, r.updated_at,
+            r.claim_for, r.status AS current_status_name, e.nic, e.initials, e.surname,
+            CONCAT_WS(' ', e.initials, e.surname) AS employee_name, d.division_name AS division
+         FROM xd_claim_requests r
+         LEFT JOIN xd_employees e ON e.computer_number = r.emp_computer_number
+         LEFT JOIN xd_divisions d ON d.div_code = e.division_code
+         WHERE r.r_id = :claim_id LIMIT 1"
+    );
+    $claimStmt->execute([":claim_id" => $claimId]);
+    $claim = $claimStmt->fetch(PDO::FETCH_ASSOC);
     if (!$claim) {
         send_json(false, "Claim not found", null, 404);
     }
 
-    $historyStmt = $conn->prepare("
-        SELECT 
-            h.history_id,
-            old_status.status_name AS old_status,
-            new_status.status_name AS new_status,
-            h.remarks,
-            au.username AS updated_by,
-            h.updated_at
-        FROM claim_status_history h
-        LEFT JOIN claim_statuses old_status ON h.old_status_id = old_status.status_id
-        INNER JOIN claim_statuses new_status ON h.new_status_id = new_status.status_id
-        INNER JOIN admin_users au ON h.updated_by = au.admin_id
-        WHERE h.claim_id = :claim_id
-        ORDER BY h.updated_at ASC
-    ");
-
-    $historyStmt->execute([
-        ":claim_id" => $claim_id
-    ]);
-
-    $history = $historyStmt->fetchAll(PDO::FETCH_ASSOC);
-
-    $statusStmt = $conn->query("
-        SELECT status_id, status_name 
-        FROM claim_statuses 
-        ORDER BY status_order ASC
-    ");
-
-    $statuses = $statusStmt->fetchAll(PDO::FETCH_ASSOC);
-
-    send_json(true, "Claim details loaded", [
-        "claim" => $claim,
-        "history" => $history,
-        "statuses" => $statuses
-    ]);
-
+    $history = $conn->prepare(
+        "SELECT h.log_id AS history_id, old_s.status_name AS old_status, new_s.status_name AS new_status,
+            h.remarks, u.username AS updated_by, h.updated_at
+         FROM xd_claim_history_log h
+         LEFT JOIN xd_statuses old_s ON old_s.s_id = h.old_status_id
+         LEFT JOIN xd_statuses new_s ON new_s.s_id = h.new_status_id
+         LEFT JOIN xsu_system_users u ON u.u_id = h.updated_by
+         WHERE h.claim_requests_id = :claim_id
+         ORDER BY h.updated_at, h.log_id"
+    );
+    $history->execute([":claim_id" => $claimId]);
+    $statuses = $conn->query("SELECT s_id AS status_id, status_name, status_order FROM xd_statuses ORDER BY status_order, s_id")->fetchAll(PDO::FETCH_ASSOC);
+    send_json(true, "Claim details loaded", ["claim" => $claim, "history" => $history->fetchAll(PDO::FETCH_ASSOC), "statuses" => $statuses]);
 } catch (PDOException $e) {
-    send_json(false, "Failed to load claim details", $e->getMessage(), 500);
+    send_json(false, "Failed to load claim details", null, 500);
 }

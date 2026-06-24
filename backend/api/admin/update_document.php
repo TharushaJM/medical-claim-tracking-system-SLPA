@@ -5,52 +5,17 @@ require_once "../../helpers/response.php";
 require_once "../../helpers/auth.php";
 
 require_admin_login();
-
-if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-    send_json(false, "Invalid request method", null, 405);
-}
-
+if ($_SERVER["REQUEST_METHOD"] !== "POST") send_json(false, "Only POST method is allowed", null, 405);
 $input = json_decode(file_get_contents("php://input"), true);
-
-$claim_id = isset($input["claim_id"]) ? (int) $input["claim_id"] : 0;
-$physical_document_received = strtoupper(trim($input["physical_document_received"] ?? "NO"));
-$document_received_date = trim($input["document_received_date"] ?? "");
-$physical_file_no = trim($input["physical_file_no"] ?? "");
-$missing_documents = trim($input["missing_documents"] ?? "");
-$document_remarks = trim($input["document_remarks"] ?? "");
-
-if ($claim_id <= 0) {
-    send_json(false, "Valid claim ID is required", null, 400);
-}
-
-if (!in_array($physical_document_received, ["YES", "NO"])) {
-    send_json(false, "Physical document received must be YES or NO", null, 400);
-}
-
+$claimId = (int) ($input["claim_id"] ?? 0);
+$received = $input["is_document_received"] ?? $input["physical_document_received"] ?? null;
+$date = trim($input["document_received_date"] ?? "");
+$invoice = trim($input["invoice_number"] ?? $input["physical_file_no"] ?? "");
+if ($claimId <= 0 || !in_array((string) $received, ["0", "1", "YES", "NO", "yes", "no"], true)) send_json(false, "Claim ID and document receipt status are required", null, 400);
+$received = in_array(strtoupper((string) $received), ["1", "YES"], true) ? 1 : 0;
 try {
-    $stmt = $conn->prepare("
-        UPDATE medical_claims
-        SET 
-            physical_document_received = :physical_document_received,
-            document_received_date = :document_received_date,
-            physical_file_no = :physical_file_no,
-            missing_documents = :missing_documents,
-            document_remarks = :document_remarks,
-            updated_at = NOW()
-        WHERE claim_id = :claim_id
-    ");
-
-    $stmt->execute([
-        ":physical_document_received" => $physical_document_received,
-        ":document_received_date" => $document_received_date !== "" ? $document_received_date : null,
-        ":physical_file_no" => $physical_file_no !== "" ? $physical_file_no : null,
-        ":missing_documents" => $missing_documents !== "" ? $missing_documents : null,
-        ":document_remarks" => $document_remarks !== "" ? $document_remarks : null,
-        ":claim_id" => $claim_id
-    ]);
-
+    $stmt = $conn->prepare("UPDATE xd_claim_requests SET is_document_received = :received, document_received_date = :received_date, invoice_number = :invoice, updated_at = NOW() WHERE r_id = :claim_id");
+    $stmt->execute([":received" => $received, ":received_date" => $date !== "" ? $date : null, ":invoice" => $invoice !== "" ? $invoice : null, ":claim_id" => $claimId]);
+    if ($stmt->rowCount() === 0) { $exists = $conn->prepare("SELECT 1 FROM xd_claim_requests WHERE r_id = ?"); $exists->execute([$claimId]); if (!$exists->fetchColumn()) send_json(false, "Claim not found", null, 404); }
     send_json(true, "Document tracking updated successfully");
-
-} catch (PDOException $e) {
-    send_json(false, "Failed to update document tracking", $e->getMessage(), 500);
-}
+} catch (PDOException $e) { send_json(false, "Failed to update document tracking", null, 500); }
