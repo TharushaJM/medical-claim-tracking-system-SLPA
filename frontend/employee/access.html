@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLPA Medical Claims - Employee Access</title>
+    <meta name="description" content="Sri Lanka Ports Authority Wellness Center — Employee Medical Claim Registration and Tracking Portal.">
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/employee.css">
+</head>
+<body class="employee-access-page">
+
+    <!-- Top Info Bar -->
+    <div class="slpa-topbar">
+        <div class="slpa-topbar-inner">
+            <span class="slpa-topbar-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                info@slpa.lk
+            </span>
+            <span class="slpa-topbar-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.62 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                +94-11 242 12 01
+            </span>
+            <span class="slpa-topbar-divider"></span>
+            <span class="slpa-topbar-item slpa-topbar-help">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                Help Desk: 1984
+            </span>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header class="slpa-header">
+        <div class="slpa-header-inner">
+            <!-- Brand -->
+            <div class="slpa-brand">
+                <div class="slpa-logo-wrap">
+                    <img
+                        src="../assets/images/slpa-logo.png"
+                        alt="Sri Lanka Ports Authority"
+                        class="slpa-logo-img"
+                    >
+                </div>
+            </div>
+        </div><!-- end slpa-header-inner -->
+
+        <!-- Dark Nav Bar — full width, like slpa.lk -->
+        <div class="slpa-nav-bar">
+            <nav class="slpa-nav">
+                <a href="access.html" class="slpa-nav-link slpa-nav-active">Home</a>
+                <a href="submit-claim.html" class="slpa-nav-link">New Claim</a>
+                <a href="claims.html" class="slpa-nav-link">My Claims</a>
+                <a href="https://www.slpa.lk" target="_blank" rel="noopener noreferrer" class="slpa-nav-link">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    SLPA Official Site
+                </a>
+                <a href="https://www.slpa.lk/port-colombo/help-desk" target="_blank" rel="noopener noreferrer" class="slpa-nav-helpdesk">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    Help Desk
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section with Background -->
+    <section class="slpa-hero">
+        <div class="slpa-hero-overlay"></div>
+        <div class="slpa-hero-content">
+            <div class="slpa-hero-left">
+                <div class="slpa-section-tag">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#f5a623"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+                    WELLNESS CENTER
+                </div>
+                <h1>Medical Claim<br>Registration &amp; Tracking</h1>
+                <p class="slpa-hero-desc">
+                    Enter your Computer Number and NIC to access your medical claim records. 
+                    Submit and track claims through the Wellness Center portal.
+                </p>
+                <div class="slpa-feature-cards">
+                    <div class="slpa-feature-card">
+                        <div class="slpa-feature-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        </div>
+                        <div>
+                            <strong>Register Claims</strong>
+                            <span>Submit new medical claim requests online</span>
+                        </div>
+                    </div>
+                    <div class="slpa-feature-card">
+                        <div class="slpa-feature-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                        </div>
+                        <div>
+                            <strong>Track Status</strong>
+                            <span>Monitor each claim through every stage</span>
+                        </div>
+                    </div>
+                    <div class="slpa-feature-card">
+                        <div class="slpa-feature-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        </div>
+                        <div>
+                            <strong>View Remarks</strong>
+                            <span>See feedback from the Wellness Center</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Access Card -->
+            <div class="slpa-access-card">
+                <div class="slpa-card-header">
+                    <div class="slpa-card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </div>
+                    <div>
+                        <h2>Employee Access</h2>
+                        <p>Verify your identity to continue</p>
+                    </div>
+                </div>
+
+                <div class="slpa-card-divider"></div>
+
+                <form id="employeeAccessForm" novalidate>
+                    <div class="slpa-form-group">
+                        <label for="computerNumber">
+                            Computer Number
+                            <span class="slpa-required">*</span>
+                        </label>
+                        <div class="slpa-input-wrap">
+                            <svg class="slpa-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                            <input
+                                type="text"
+                                id="computerNumber"
+                                name="computer_number"
+                                placeholder="e.g. 10342"
+                                autocomplete="off"
+                                required
+                            >
+                        </div>
+                    </div>
+
+                    <div class="slpa-form-group">
+                        <label for="nicNumber">
+                            NIC Number
+                            <span class="slpa-required">*</span>
+                        </label>
+                        <div class="slpa-input-wrap">
+                            <svg class="slpa-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                            <input
+                                type="text"
+                                id="nicNumber"
+                                name="nic"
+                                placeholder="e.g. 892345671V or 200012345678"
+                                autocomplete="off"
+                                required
+                            >
+                        </div>
+                    </div>
+
+                    <button type="submit" id="checkClaimsBtn" class="slpa-btn-primary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        Check My Claims
+                    </button>
+
+                    <button type="button" id="newClaimBtn" class="slpa-btn-secondary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        Submit a New Claim Request
+                    </button>
+
+                    <div id="employeeMessage" class="slpa-message" role="alert" aria-live="polite"></div>
+                </form>
+
+                <div class="slpa-card-notice">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    Physical claim forms &amp; bills must still be submitted to the Wellness Center directly.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="slpa-footer">
+        <div class="slpa-footer-inner">
+            <p>© Sri Lanka Ports Authority — Wellness Center Medical Claims System</p>
+            <p>For assistance, contact the Wellness Center directly &nbsp;|&nbsp; Help Desk: 1984</p>
+        </div>
+    </footer>
+
+    <script src="../assets/js/employee.js"></script>
+</body>
+</html>
