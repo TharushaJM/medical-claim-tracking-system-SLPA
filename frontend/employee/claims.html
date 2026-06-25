@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Claims | SLPA Medical Claims</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/employee.css">
+</head>
+<body class="employee-claims-page">
+    <header class="slpa-header">
+        <div class="slpa-header-inner">
+            <a class="slpa-brand" href="access.html" aria-label="SLPA Medical Claims home">
+                <div class="slpa-logo-wrap">
+                    <img src="../assets/images/slpa-logo.png" alt="Sri Lanka Ports Authority" class="slpa-logo-img">
+                </div>
+            </a>
+        </div>
+        <div class="slpa-nav-bar">
+            <nav class="slpa-nav" aria-label="Employee portal navigation">
+                <a href="access.html" class="slpa-nav-link">Home</a>
+                <a href="submit-claim.html" class="slpa-nav-link">New Claim</a>
+                <a href="claims.html" class="slpa-nav-link slpa-nav-active">My Claims</a>
+                <a href="https://www.slpa.lk" target="_blank" rel="noopener noreferrer" class="slpa-nav-link">SLPA Official Site</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="claims-main">
+        <div class="claims-heading">
+            <div>
+                <h1>My Medical Claims</h1>
+                <p id="employeeSummary">Loading your claim records...</p>
+            </div>
+            <a href="submit-claim.html" class="claims-new-button" id="newClaimBtn">+ New Claim Request</a>
+        </div>
+
+        <div id="claimsMessage" class="claims-message" role="alert" aria-live="polite"></div>
+
+        <div class="claims-card">
+            <div class="claims-table-wrap">
+                <table class="claims-table" id="claimsTable">
+                    <thead>
+                        <tr>
+                            <th>Reference No</th>
+                            <th>OPD Date</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Patient Name</th>
+                            <th>Current Status</th>
+                            <th class="col-action">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="claimsTableBody"></tbody>
+                </table>
+            </div>
+            <p id="emptyClaims" class="claims-empty" hidden>No claims have been submitted yet.</p>
+            <div class="claims-pagination" id="claimsPagination">
+                <span id="claimsTotalText" class="claims-total-text"></span>
+                <div class="pagination-controls">
+                    <button id="prevPage" class="page-btn" disabled>Previous</button>
+                    <span id="pageLabel" class="page-label"></span>
+                    <button id="nextPage" class="page-btn" disabled>Next</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="slpa-footer">
+        <div class="slpa-footer-inner">
+            <p>© Sri Lanka Ports Authority — Wellness Center Medical Claims System</p>
+            <p>For assistance, contact the Wellness Center directly.</p>
+        </div>
+    </footer>
+
+    <script src="../assets/js/claims.js"></script>
+</body>
+</html>

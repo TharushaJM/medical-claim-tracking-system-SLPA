@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const showMessage = (message, type) => {
         messageBox.textContent = message;
-        messageBox.className = `slpa-message ${type}`;
+        messageBox.className = `slpa-message slpa-toast ${type}`;
     };
 
     const clearMessage = () => {
