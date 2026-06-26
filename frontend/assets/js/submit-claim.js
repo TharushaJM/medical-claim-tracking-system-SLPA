@@ -1,18 +1,4 @@
-/**
- * submit-claim.js
- * Handles the Medical Claim Request Form submission.
- *
- * DB table: xd_claim_requests
- * Fields sent to backend (submit_claim.php):
- *   reference         → VARCHAR(20)
- *   computer_number   → maps to emp_computer_number VARCHAR(20)
- *   nic               → used to verify employee identity
- *   opd_date          → DATE  (YYYY-MM-DD)
- *   amount_requested  → DOUBLE
- *   claim_type        → ENUM('opd','specs')
- *   claim_for         → ENUM('MYSELF','SPOUSE','CHILD','MOTHER','FATHER')
- *   patient_name      → VARCHAR(100)
- */
+
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -60,8 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
     divInput.value  = emp.division_name  || "";
     telInput.value  = emp.telephone      || "";
 
-    /* ── Auto-generate Reference Number (system assigned) ──────────
-     * Format: MC-YYYY-NNNNN  (backend checks uniqueness)            */
+    // Auto-generate Reference Number (system assigned).
     function generateReference() {
         const year   = new Date().getFullYear();
         const seq    = String(Math.floor(10000 + Math.random() * 90000));
@@ -69,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     refInput.value = generateReference();
 
-    /* ── Helpers ───────────────────────────────────────────────── */
+    // ── Helpers ───────────────────────────────────────────────── */
     function showMessage(text, type = "error") {
         messageBox.textContent = text;
         messageBox.className   = `claims-message ${type}`;
@@ -94,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    /* ── Clear/reset the editable fields only ──────────────────── */
+    //  Clear/reset the editable fields only /
     clearBtn.addEventListener("click", () => {
         compInput.value       = "";
         nicInput.value        = "";
@@ -111,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
         compInput.focus();
     });
 
-    /* ── Auto-fill patient name when "Myself" is chosen ─────────── */
+    // Auto-fill patient name when "Myself" is chosen /
     claimForSelect.addEventListener("change", () => {
         if (claimForSelect.value === "MYSELF") {
             patientInput.value = nameInput.value || "";
@@ -120,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    /* ── Form submission ───────────────────────────────────────── */
+    // Form submission 
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
         clearMessage();
@@ -234,7 +219,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    /* ── Clear message on any input change ─────────────────────── */
+    //  Clear message on any input change 
     [compInput, nicInput, nameInput, divInput, telInput,
      opdDateInput, amountInput, claimTypeSelect, claimForSelect, patientInput].forEach(el => {
         el.addEventListener("input", clearMessage);
