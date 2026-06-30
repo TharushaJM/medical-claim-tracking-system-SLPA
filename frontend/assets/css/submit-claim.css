@@ -1,0 +1,330 @@
+/* ============================================================ */
+/*  SLPA Medical Claims — Submit Claim Form Stylesheet          */
+/*  Palette: White | Navy #062c55 | Gold #e8a020               */
+/* ============================================================ */
+
+/* ── Page header row ────────────────────────────────────────── */
+.sc-main {
+    margin-top: 36px;
+    margin-bottom: 54px;
+}
+
+.sc-page-heading {
+    margin-bottom: 24px;
+}
+
+.sc-page-heading h1 {
+    margin: 8px 0 6px;
+    font-size: 28px;
+    font-weight: 800;
+    color: #162032;
+    letter-spacing: -0.3px;
+}
+
+.sc-subtitle {
+    margin: 0;
+    font-size: 14px;
+    color: #5a6b7a;
+    line-height: 1.65;
+    max-width: 680px;
+}
+
+/* ── Main form card ──────────────────────────────────────────── */
+.sc-card {
+    background: #ffffff;
+    border: 1px solid #dce4ee;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(15, 35, 60, .07);
+    overflow: hidden;
+    padding: 32px 36px 28px;
+    margin-bottom: 16px;
+}
+
+/* ── Section blocks ──────────────────────────────────────────── */
+.sc-section {
+    margin-bottom: 28px;
+}
+
+.sc-section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #162032;
+    margin: 0 0 10px;
+    letter-spacing: 0.1px;
+}
+
+.sc-section-divider {
+    border: none;
+    border-top: 1px solid #e5edf5;
+    margin: 0 0 22px;
+}
+
+/* ── Grid layout ─────────────────────────────────────────────── */
+.sc-grid {
+    display: grid;
+    gap: 18px 24px;
+}
+
+.sc-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* ── Field group ─────────────────────────────────────────────── */
+.sc-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* ── Label ────────────────────────────────────────────────────── */
+.sc-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #7a8fa3;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    white-space: nowrap;
+}
+
+.sc-required {
+    color: #cc2222;
+    font-weight: 700;
+}
+
+/* ── Input / Select shared ────────────────────────────────────── */
+.sc-input {
+    width: 100%;
+    height: 42px;
+    border: 1px solid #ccd6e2;
+    border-radius: 6px;
+    padding: 0 13px;
+    font-size: 14px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #243649;
+    background: #ffffff;
+    outline: none;
+    transition: border-color 0.18s, box-shadow 0.18s;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.sc-input::placeholder {
+    color: #aabccc;
+    font-size: 13px;
+}
+
+.sc-input:focus {
+    border-color: #062c55;
+    box-shadow: 0 0 0 3px rgba(6, 44, 85, 0.09);
+}
+
+/* ── Read-only input (auto-filled from session) ───────────────── */
+.sc-input-readonly {
+    background: #f5f8fc;
+    color: #6e8099;
+    border-color: #dce4ee;
+    cursor: default;
+}
+
+.sc-input-readonly:focus {
+    border-color: #dce4ee;
+    box-shadow: none;
+}
+
+/* ── Select arrow ─────────────────────────────────────────────── */
+.sc-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237a8fa3' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+    cursor: pointer;
+}
+
+.sc-select:focus {
+    border-color: #062c55;
+    box-shadow: 0 0 0 3px rgba(6, 44, 85, 0.09);
+}
+
+/* Date input tweak */
+input[type="date"].sc-input {
+    padding-right: 8px;
+}
+
+/* ── Hint text ────────────────────────────────────────────────── */
+.sc-hint {
+    font-size: 11.5px;
+    color: #9aabb8;
+    margin-top: 1px;
+}
+
+/* ── Actions row ──────────────────────────────────────────────── */
+.sc-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 22px;
+    flex-wrap: wrap;
+}
+
+/* Primary submit button */
+.sc-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 44px;
+    padding: 0 28px;
+    background: #162032;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: Arial, Helvetica, sans-serif;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: background 0.18s, box-shadow 0.18s, transform 0.1s;
+    white-space: nowrap;
+}
+
+.sc-btn-primary:hover {
+    background: #062c55;
+    box-shadow: 0 4px 14px rgba(6, 44, 85, 0.25);
+}
+
+.sc-btn-primary:active {
+    transform: translateY(1px);
+}
+
+.sc-btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Secondary clear button */
+.sc-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 44px;
+    padding: 0 22px;
+    background: #ffffff;
+    color: #5a6b7a;
+    border: 1px solid #ccd6e2;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: Arial, Helvetica, sans-serif;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    white-space: nowrap;
+}
+
+.sc-btn-secondary:hover {
+    background: #f0f5fb;
+    border-color: #aac0d8;
+    color: #162032;
+}
+
+/* ── Notice block ─────────────────────────────────────────────── */
+.sc-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 13px 18px;
+    background: #fffbea;
+    border: 1px solid #f0d080;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #7a5500;
+    line-height: 1.55;
+}
+
+.sc-notice svg {
+    color: #c88800;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.sc-notice strong {
+    color: #5a3a00;
+}
+
+/* ── Success overlay after submit ─────────────────────────────── */
+.sc-success-banner {
+    display: none;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 28px;
+    background: #e6f4ea;
+    border: 1px solid #a3d4b0;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.sc-success-banner.visible {
+    display: flex;
+}
+
+.sc-success-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #1a6830;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    flex-shrink: 0;
+}
+
+.sc-success-text h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a5c2e;
+    margin: 0 0 3px;
+}
+
+.sc-success-text p {
+    font-size: 13px;
+    color: #2a7a44;
+    margin: 0;
+}
+
+.sc-success-ref {
+    font-weight: 700;
+    color: #1a5c2e;
+}
+
+/* ── Responsive ───────────────────────────────────────────────── */
+@media (max-width: 900px) {
+    .sc-grid-3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .sc-card {
+        padding: 22px 18px 20px;
+    }
+
+    .sc-grid-3 {
+        grid-template-columns: 1fr;
+    }
+
+    .sc-page-heading h1 {
+        font-size: 23px;
+    }
+
+    .sc-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .sc-btn-primary,
+    .sc-btn-secondary {
+        width: 100%;
+        justify-content: center;
+    }
+}
