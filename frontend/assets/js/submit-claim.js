@@ -79,13 +79,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    //  Clear/reset the editable fields only /
+    // Clear only claim-entry fields; verified employee details stay visible.
     clearBtn.addEventListener("click", () => {
-        compInput.value       = "";
-        nicInput.value        = "";
-        nameInput.value       = "";
-        divInput.value        = "";
-        telInput.value        = "";
         opdDateInput.value    = "";
         amountInput.value     = "";
         claimTypeSelect.value = "opd";
@@ -93,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
         patientInput.value    = "";
         refInput.value        = generateReference(); // fresh reference
         clearMessage();
-        compInput.focus();
+        opdDateInput.focus();
     });
 
     // Auto-fill patient name when "Myself" is chosen /

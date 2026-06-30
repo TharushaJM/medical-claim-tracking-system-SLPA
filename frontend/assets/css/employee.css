@@ -145,6 +145,17 @@
     color: #f5c842;
 }
 
+.slpa-nav-action {
+    appearance: none;
+    border-top: 0;
+    border-bottom: 0;
+    border-left: 0;
+    border-right: 1px solid rgba(255,255,255,0.18);
+    background: transparent;
+    cursor: pointer;
+    font-family: inherit;
+}
+
 /* like SLPA "HELP DESK" */
 .slpa-nav-helpdesk {
     display: flex;
