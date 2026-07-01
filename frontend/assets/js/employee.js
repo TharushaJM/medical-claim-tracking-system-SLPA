@@ -12,12 +12,20 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
+  let messageTimer;
+
   const showMessage = (message, type) => {
+    clearTimeout(messageTimer);
     messageBox.textContent = message;
     messageBox.className = `slpa-message slpa-toast ${type}`;
+
+    messageTimer = setTimeout(() => {
+      clearMessage();
+    }, 4000);
   };
 
   const clearMessage = () => {
+    clearTimeout(messageTimer);
     messageBox.textContent = "";
     messageBox.className = "slpa-message";
   };
