@@ -14,8 +14,9 @@ if (!is_array($input)) {
 }
 $claimId = (int) ($input["claim_id"] ?? 0);
 $newStatusId = (int) ($input["new_status_id"] ?? 0);
+$newStatusName = trim($input["new_status_name"] ?? "");
 $remarks = trim($input["remarks"] ?? "");
-if ($claimId <= 0 || $newStatusId <= 0 || $remarks === "") {
+if ($claimId <= 0 || ($newStatusId <= 0 && $newStatusName === "") || $remarks === "") {
     send_json(false, "Claim ID, new status, and remarks are required", null, 400);
 }
 
@@ -28,9 +29,31 @@ try {
         $conn->rollBack();
         send_json(false, "Claim not found", null, 404);
     }
-    $statusStmt = $conn->prepare("SELECT s_id, status_name FROM xd_statuses WHERE s_id = :status_id LIMIT 1");
-    $statusStmt->execute([":status_id" => $newStatusId]);
-    $newStatus = $statusStmt->fetch(PDO::FETCH_ASSOC);
+    if ($newStatusId > 0) {
+        $statusStmt = $conn->prepare("SELECT s_id, status_name FROM xd_statuses WHERE s_id = :status_id LIMIT 1");
+        $statusStmt->execute([":status_id" => $newStatusId]);
+        $newStatus = $statusStmt->fetch(PDO::FETCH_ASSOC);
+    } else {
+        $statusStmt = $conn->prepare("SELECT s_id, status_name FROM xd_statuses WHERE status_name = :status_name LIMIT 1");
+        $statusStmt->execute([":status_name" => $newStatusName]);
+        $newStatus = $statusStmt->fetch(PDO::FETCH_ASSOC);
+        if (!$newStatus) {
+            $orderMap = [
+                "Submitted" => 10,
+                "Received Document" => 20,
+                "Document Needed" => 30,
+                "Submitted to Doctor" => 40,
+                "Approved by Doctor" => 50,
+                "Rejected by Doctor" => 60,
+                "Payment Approved" => 70,
+                "Paid" => 80
+            ];
+            $conn->prepare("INSERT INTO xd_statuses (status_name, status_order) VALUES (:status_name, :status_order)")
+                ->execute([":status_name" => $newStatusName, ":status_order" => $orderMap[$newStatusName] ?? 999]);
+            $newStatus = ["s_id" => (int) $conn->lastInsertId(), "status_name" => $newStatusName];
+            $newStatusId = (int) $newStatus["s_id"];
+        }
+    }
     if (!$newStatus) {
         $conn->rollBack();
         send_json(false, "Invalid status selected", null, 400);
@@ -39,8 +62,9 @@ try {
     $oldIdStmt->execute([":status_name" => $claim["status"]]);
     $oldStatusId = $oldIdStmt->fetchColumn();
     if ($oldStatusId === false) {
-        $conn->rollBack();
-        send_json(false, "The claim has an unknown current status", null, 409);
+        $conn->prepare("INSERT INTO xd_statuses (status_name, status_order) VALUES (:status_name, :status_order)")
+            ->execute([":status_name" => $claim["status"], ":status_order" => 999]);
+        $oldStatusId = (int) $conn->lastInsertId();
     }
     $conn->prepare("UPDATE xd_claim_requests SET status = :status, updated_at = NOW() WHERE r_id = :claim_id")
         ->execute([":status" => $newStatus["status_name"], ":claim_id" => $claimId]);

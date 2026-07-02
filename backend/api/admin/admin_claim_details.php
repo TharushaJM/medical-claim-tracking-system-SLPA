@@ -17,7 +17,8 @@ try {
             r.invoice_number, r.medical_recommendation, r.medical_remark, r.doctor_approved_date,
             r.approved_amount, r.payment_approved_date, r.paid_date, r.created_at, r.updated_at,
             r.claim_for, r.status AS current_status_name, e.nic, e.initials, e.surname,
-            CONCAT_WS(' ', e.initials, e.surname) AS employee_name, d.division_name AS division
+            COALESCE(NULLIF(TRIM(CONCAT_WS(' ', e.initials, e.surname)), ''), r.patient_name, 'Unknown Employee') AS employee_name,
+            COALESCE(NULLIF(d.division_name, ''), 'Not Assigned') AS division
          FROM xd_claim_requests r
          LEFT JOIN xd_employees e ON e.computer_number = r.emp_computer_number
          LEFT JOIN xd_divisions d ON d.div_code = e.division_code
@@ -40,7 +41,22 @@ try {
          ORDER BY h.updated_at, h.log_id"
     );
     $history->execute([":claim_id" => $claimId]);
-    $statuses = $conn->query("SELECT s_id AS status_id, status_name, status_order FROM xd_statuses ORDER BY status_order, s_id")->fetchAll(PDO::FETCH_ASSOC);
+    $statuses = $conn->query(
+        "SELECT status_id, status_name, MIN(status_order) AS status_order
+         FROM (
+            SELECT s_id AS status_id, status_name, status_order FROM xd_statuses WHERE status_name IS NOT NULL AND status_name <> ''
+            UNION ALL SELECT 0, 'Submitted', 10
+            UNION ALL SELECT 0, 'Received Document', 20
+            UNION ALL SELECT 0, 'Document Needed', 30
+            UNION ALL SELECT 0, 'Submitted to Doctor', 40
+            UNION ALL SELECT 0, 'Approved by Doctor', 50
+            UNION ALL SELECT 0, 'Rejected by Doctor', 60
+            UNION ALL SELECT 0, 'Payment Approved', 70
+            UNION ALL SELECT 0, 'Paid', 80
+         ) status_list
+         GROUP BY status_name
+         ORDER BY status_order, status_name"
+    )->fetchAll(PDO::FETCH_ASSOC);
     send_json(true, "Claim details loaded", ["claim" => $claim, "history" => $history->fetchAll(PDO::FETCH_ASSOC), "statuses" => $statuses]);
 } catch (PDOException $e) {
     send_json(false, "Failed to load claim details", null, 500);
