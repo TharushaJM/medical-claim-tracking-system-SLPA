@@ -1032,6 +1032,20 @@ form {
     margin-top: 2px;
 }
 
+.timeline-step-remark {
+    display: block;
+    width: 100%;
+    margin-top: 7px;
+    padding: 9px 11px;
+    border-left: 3px solid #e8a020;
+    border-radius: 4px;
+    background: #f8fafc;
+    color: #3a4f63;
+    font-size: 13px;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
 /* ============================================================ */
 /*  Responsive                                                  */
 /* ============================================================ */

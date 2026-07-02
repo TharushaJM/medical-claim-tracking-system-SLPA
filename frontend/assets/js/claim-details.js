@@ -57,8 +57,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const ALL_STEPS = [
         "Submitted",
         "Received Document",
+        "Document Needed",
         "Submitted to Doctor",
         "Approved by Doctor",
+        "Rejected by Doctor",
         "Payment Approved",
         "Paid",
     ];
@@ -119,7 +121,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         setText("dRemark", latestRemark || "No remarks yet.");
 
         /* Timeline */
-        buildTimeline(status);
+        buildTimeline(status, history);
     }
 
     /* Get the most recent remark from history, fallback to claim's medical_remark */
@@ -135,15 +137,29 @@ document.addEventListener("DOMContentLoaded", async () => {
         return fallbackRemark || null;
     }
 
-    function buildTimeline(status) {
+    function buildTimeline(status, history = []) {
         const currentIdx = ALL_STEPS.indexOf(status);
         const timeline   = document.getElementById("timelineList");
         timeline.replaceChildren();
 
-        ALL_STEPS.forEach((step, i) => {
+        const historyByStatus = history.reduce((map, item) => {
+            const statusName = item.new_status_name || item.new_status || "";
+            if (!statusName) return map;
+            if (!map.has(statusName)) map.set(statusName, []);
+            map.get(statusName).push(item);
+            return map;
+        }, new Map());
+
+        const steps = [...ALL_STEPS];
+        historyByStatus.forEach((_, statusName) => {
+            if (!steps.includes(statusName)) steps.push(statusName);
+        });
+
+        steps.forEach((step, i) => {
             const li         = document.createElement("li");
             const isCurrent  = step === status;
-            const isDone     = i <= currentIdx;
+            const stepHistory = historyByStatus.get(step) || [];
+            const isDone     = stepHistory.length > 0 || (currentIdx >= 0 && i <= currentIdx);
 
             li.className = "timeline-item"
                 + (isDone    ? " timeline-done"    : "")
@@ -165,13 +181,28 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             /* Label */
             const labelWrap = document.createElement("div");
+            labelWrap.className = "timeline-content";
 
             const name = document.createElement("span");
             name.className   = "timeline-step-name";
             name.textContent = step;
             labelWrap.append(name);
 
-            if (isCurrent) {
+            if (stepHistory.length > 0) {
+                stepHistory.forEach(entry => {
+                    const meta = document.createElement("span");
+                    meta.className = "timeline-step-sub";
+                    meta.textContent = formatTimelineMeta(entry);
+                    labelWrap.append(meta);
+
+                    if (entry.remarks && entry.remarks.trim() !== "") {
+                        const remark = document.createElement("span");
+                        remark.className = "timeline-step-remark";
+                        remark.textContent = entry.remarks;
+                        labelWrap.append(remark);
+                    }
+                });
+            } else if (isCurrent) {
                 const sub = document.createElement("span");
                 sub.className   = "timeline-step-sub";
                 sub.textContent = "Current status";
@@ -181,6 +212,28 @@ document.addEventListener("DOMContentLoaded", async () => {
             li.append(icon, labelWrap);
             timeline.append(li);
         });
+    }
+
+    function formatTimelineMeta(entry) {
+        const from = entry.old_status_name || entry.old_status || "";
+        const to = entry.new_status_name || entry.new_status || "";
+        const changedBy = entry.updated_by_name || entry.updated_by || "Admin";
+        const changedAt = formatDateTime(entry.updated_at);
+        const statusChange = from && to ? `${from} to ${to}` : (to || "Status updated");
+        return `${statusChange} by ${changedBy} on ${changedAt}`;
+    }
+
+    function formatDateTime(value) {
+        if (!value) return "date not available";
+        const d = new Date(value.replace(" ", "T"));
+        if (Number.isNaN(d.getTime())) return value;
+        return new Intl.DateTimeFormat("en-LK", {
+            year: "numeric",
+            month: "short",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit"
+        }).format(d);
     }
 
     function setText(id, val) {
