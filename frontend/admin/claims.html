@@ -3,26 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Claims | SLPA Wellness</title>
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="description" content="Admin Claims List - SLPA Wellness Center Medical Claim Registration and Tracking System.">
+    <title>All Claims | SLPA Wellness Center</title>
     <script>
-        if (window.location.port === "5500") window.location.replace("http://127.0.0.1/medical-claim-tracking-system-SLPA/frontend/admin/claims.html");
+        if (window.location.protocol === "file:" || window.location.port === "5500") {
+            window.location.replace("http://127.0.0.1/medical-claim-tracking-system-SLPA/frontend/admin/claims.html");
+        }
     </script>
-    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="../assets/css/admin.css?v=20260701-change-password-1">
+    <style>
+        #claimsPage .topbar-search,
+        #claimsPage .topbar-actions,
+        #claimsPage .topbar-icon-btn,
+        #claimsPage .notif-badge {
+            display: none !important;
+            visibility: hidden !important;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document
+                .querySelectorAll("#claimsPage .topbar-search, #claimsPage .topbar-actions, #claimsPage .topbar-icon-btn, #claimsPage .notif-badge")
+                .forEach(function (element) { element.remove(); });
+        });
+    </script>
 </head>
 <body>
+
 <div class="admin-app" id="claimsPage">
-    <div class="main-area" style="margin-left:0; width:100%;">
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand sidebar-brand-logo">
+            <img src="slpa-logo-transparent.png" alt="Sri Lanka Ports Authority" class="sidebar-logo">
+            <div class="brand-role">Admin Console</div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">Main Menu</div>
+
+            <button class="nav-item" id="nav-dashboard" data-page="dashboard">
+                <span class="nav-icon">D</span>
+                Dashboard
+            </button>
+
+            <button class="nav-item active" id="nav-claims" data-page="claims">
+                <span class="nav-icon">C</span>
+                All Claims
+            </button>
+
+            <button class="nav-item" id="nav-details" data-page="details">
+                <span class="nav-icon">V</span>
+                Claim Details
+            </button>
+
+            <div class="nav-section-label" style="margin-top:8px;">Management</div>
+
+            <button class="nav-item" id="nav-reports" data-page="reports">
+                <span class="nav-icon">R</span>
+                Reports
+            </button>
+
+            <button class="nav-item" id="nav-settings" data-page="settings">
+                <span class="nav-icon">S</span>
+                Settings
+            </button>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="nav-item" id="logoutBtn">
+                <span class="nav-icon">L</span>
+                Logout
+            </button>
+        </div>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="main-area">
         <header class="topbar">
-            <span class="topbar-title">All Claims</span>
-            <div class="topbar-actions"><a class="view-all-link" href="dashboard.html">← Dashboard</a></div>
-            <div class="topbar-profile"><div class="topbar-avatar">A</div><div class="topbar-profile-text"><div class="profile-name">Welcome, Admin</div><div class="profile-role">Wellness Admin</div></div></div>
+            <button class="topbar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">&#9776;</button>
+            <span class="topbar-title" id="topbarTitle">All Claims</span>
+
+            <div class="topbar-clock" id="adminClock" aria-label="Current time">--:-- --</div>
+
+            <div class="profile-menu">
+                <button class="topbar-profile" id="profileBtn" type="button" aria-haspopup="true" aria-expanded="false" title="Admin profile">
+                    <div class="topbar-avatar">A</div>
+                    <div class="topbar-profile-text">
+                        <div class="profile-name">Welcome, Admin</div>
+                        <div class="profile-role">Wellness Admin</div>
+                    </div>
+                    <span class="profile-chevron">⌄</span>
+                </button>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <button type="button" class="profile-menu-item" id="viewProfileBtn">View Profile</button>
+                    <button type="button" class="profile-menu-item" id="changePasswordBtn">Change Password</button>
+                    <button type="button" class="profile-menu-item danger" id="profileLogoutBtn">Logout</button>
+                </div>
+            </div>
         </header>
+
         <main class="dashboard-content">
-            <div class="page-header"><h1>All Claims</h1><p id="claimsCount">Loading claims…</p></div>
-            <div class="section-card"><div class="table-wrap"><table><thead><tr><th>Reference No</th><th>Computer No</th><th>Employee Name</th><th>Claim Type</th><th>OPD Date</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead><tbody id="claimsTbody"><tr><td colspan="8" class="empty-state">Loading…</td></tr></tbody></table></div></div>
+            <div class="page-header">
+                <h1>All Claims</h1>
+                <p id="claimsCount">Loading claims...</p>
+            </div>
+
+            <div class="section-card">
+                <div class="section-header">
+                    <div class="section-header-left">
+                        <h2>Quick Search</h2>
+                        <p>Find a claim by Reference Number, Computer Number, or NIC. Refine by status, type, division, or OPD date range.</p>
+                    </div>
+                </div>
+
+                <div class="search-section">
+                    <div class="search-row-1">
+                        <div class="search-field">
+                            <label for="searchRef">Reference / Computer No / NIC</label>
+                            <input class="search-input" id="searchRef" type="text" placeholder="Reference / Computer No / NIC">
+                        </div>
+                        <div class="search-field">
+                            <label for="searchStatus">Status</label>
+                            <select class="search-select" id="searchStatus">
+                                <option value="">All Statuses</option>
+                            </select>
+                        </div>
+                        <div class="search-field">
+                            <label for="searchType">Type</label>
+                            <select class="search-select" id="searchType">
+                                <option value="">All Types</option>
+                                <option value="opd">OPD</option>
+                                <option value="specs">Spectacles</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="search-row-2">
+                        <div class="search-field">
+                            <label for="searchDivision">Division</label>
+                            <select class="search-select" id="searchDivision">
+                                <option value="">All Divisions</option>
+                            </select>
+                        </div>
+                        <div class="search-field">
+                            <label for="searchDateFrom">OPD Date From</label>
+                            <input class="search-date-input" id="searchDateFrom" type="date">
+                        </div>
+                        <div class="search-field">
+                            <label for="searchDateTo">OPD Date To</label>
+                            <input class="search-date-input" id="searchDateTo" type="date">
+                        </div>
+                    </div>
+
+                    <div class="search-btn-row">
+                        <button class="btn-search" id="searchBtn" type="button">🔎 Search</button>
+                        <button class="btn-reset" id="resetBtn" type="button">Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-header">
+                    <div class="section-header-left">
+                        <h2>Claim Requests</h2>
+                        <p>All claim request data is loaded from your PHP backend and MySQL database.</p>
+                    </div>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Reference Number</th>
+                                <th>Computer Number</th>
+                                <th>NIC</th>
+                                <th>Employee Name</th>
+                                <th>Division</th>
+                                <th>OPD Date</th>
+                                <th class="th-right">Amount</th>
+                                <th>Claim Type</th>
+                                <th>Status</th>
+                                <th>View</th>
+                            </tr>
+                        </thead>
+                        <tbody id="claimsTbody">
+                            <tr><td colspan="10" class="empty-state">Loading claims...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="claims-pagination">
+                    <button class="btn-reset" id="prevPageBtn" type="button">Previous</button>
+                    <span id="pageInfo">Page 1 of 1</span>
+                    <button class="btn-reset" id="nextPageBtn" type="button">Next</button>
+                </div>
+            </div>
         </main>
     </div>
 </div>
-<script src="../assets/js/admin.js?v=20260624-login-fix-2"></script>
+
+<div class="modal-overlay" id="logoutModal" role="dialog" aria-modal="true" aria-labelledby="logoutModalTitle">
+    <div class="modal-box">
+        <span class="modal-icon">!</span>
+        <div class="modal-title" id="logoutModalTitle">Confirm Logout</div>
+        <p class="modal-msg">Are you sure you want to logout from the admin panel?</p>
+        <div class="modal-btn-row">
+            <button class="btn-modal btn-modal-danger" id="confirmLogoutBtn">Yes, Logout</button>
+            <button class="btn-modal btn-modal-outline" id="cancelLogoutBtn">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script src="../assets/js/admin.js?v=20260701-change-password-1"></script>
 </body>
 </html>

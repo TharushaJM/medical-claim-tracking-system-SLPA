@@ -3,23 +3,274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Claim Details | SLPA Wellness</title>
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Claim Details | SLPA Wellness Center</title>
     <script>
-        if (window.location.port === "5500") window.location.replace("http://127.0.0.1/medical-claim-tracking-system-SLPA/frontend/admin/claim-details.html");
+        if (window.location.protocol === "file:" || window.location.port === "5500") {
+            window.location.replace("http://127.0.0.1/medical-claim-tracking-system-SLPA/frontend/admin/claim-details.html");
+        }
     </script>
-    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="../assets/css/admin.css?v=20260701-change-password-1">
+    <style>.admin-app .topbar-search,.admin-app .topbar-icon-btn{display:none!important;}</style>
 </head>
 <body>
+
 <div class="admin-app" id="claimDetailsPage">
-    <div class="main-area" style="margin-left:0; width:100%;">
-        <header class="topbar"><span class="topbar-title">Claim Details</span><div class="topbar-actions"><a class="view-all-link" href="claims.html">← All Claims</a></div><div class="topbar-profile"><div class="topbar-avatar">A</div><div class="topbar-profile-text"><div class="profile-name">Welcome, Admin</div><div class="profile-role">Wellness Admin</div></div></div></header>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand sidebar-brand-logo">
+            <img src="slpa-logo-transparent.png" alt="Sri Lanka Ports Authority" class="sidebar-logo">
+            <div class="brand-role">Admin Console</div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">Main Menu</div>
+
+            <button class="nav-item" id="nav-dashboard" data-page="dashboard">
+                <span class="nav-icon">D</span>
+                Dashboard
+            </button>
+
+            <button class="nav-item" id="nav-claims" data-page="claims">
+                <span class="nav-icon">C</span>
+                All Claims
+            </button>
+
+            <button class="nav-item active" id="nav-details" data-page="details">
+                <span class="nav-icon">V</span>
+                Claim Details
+            </button>
+
+            <div class="nav-section-label" style="margin-top:8px;">Management</div>
+
+            <button class="nav-item" id="nav-reports" data-page="reports">
+                <span class="nav-icon">R</span>
+                Reports
+            </button>
+
+            <button class="nav-item" id="nav-settings" data-page="settings">
+                <span class="nav-icon">S</span>
+                Settings
+            </button>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="nav-item" id="logoutBtn">
+                <span class="nav-icon">L</span>
+                Logout
+            </button>
+        </div>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="main-area">
+        <header class="topbar">
+            <button class="topbar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">&#9776;</button>
+            <span class="topbar-title" id="topbarTitle">Claim Details</span>
+
+            <div class="topbar-clock" id="adminClock" aria-label="Current time">--:-- --</div>
+
+            <div class="profile-menu">
+                <button class="topbar-profile" id="profileBtn" type="button" aria-haspopup="true" aria-expanded="false" title="Admin profile">
+                    <div class="topbar-avatar">A</div>
+                    <div class="topbar-profile-text">
+                        <div class="profile-name">Welcome, Admin</div>
+                        <div class="profile-role">Wellness Admin</div>
+                    </div>
+                    <span class="profile-chevron">⌄</span>
+                </button>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <button type="button" class="profile-menu-item" id="viewProfileBtn">View Profile</button>
+                    <button type="button" class="profile-menu-item" id="changePasswordBtn">Change Password</button>
+                    <button type="button" class="profile-menu-item danger" id="profileLogoutBtn">Logout</button>
+                </div>
+            </div>
+        </header>
+
         <main class="dashboard-content">
-            <div class="page-header"><h1 id="claimDetailsTitle">Claim Details</h1><p id="claimDetailsError" style="color:#dc2626;"></p></div>
-            <div class="section-card"><div class="section-header"><div class="section-header-left"><h2>Claim Information</h2></div></div><div class="table-wrap"><table><tbody id="claimDetailsBody"><tr><td>Loading…</td></tr></tbody></table></div></div>
-            <div class="section-card"><div class="section-header"><div class="section-header-left"><h2>Status History</h2></div></div><div class="table-wrap"><table><thead><tr><th>Previous Status</th><th>New Status</th><th>Remarks</th><th>Updated By</th><th>Updated At</th></tr></thead><tbody id="historyBody"><tr><td colspan="5" class="empty-state">Loading…</td></tr></tbody></table></div></div>
+            <div class="page-header">
+                <h1 id="claimDetailsTitle">Claim Details</h1>
+                <p id="claimDetailsError" style="color:#dc2626;"></p>
+            </div>
+
+            <div class="details-grid two-col">
+                <section class="section-card">
+                    <div class="section-header">
+                        <div class="section-header-left">
+                            <h2>Employee Information</h2>
+                            <p>Employee identity and division details.</p>
+                        </div>
+                    </div>
+                    <div class="details-list" id="employeeInfoBody">
+                        <div class="empty-state">Loading...</div>
+                    </div>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-header">
+                        <div class="section-header-left">
+                            <h2>Claim Information</h2>
+                            <p>Basic request information and current status.</p>
+                        </div>
+                    </div>
+                    <div class="details-list" id="claimInfoBody">
+                        <div class="empty-state">Loading...</div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="details-grid two-col">
+                <section class="section-card">
+                    <div class="section-header">
+                        <div class="section-header-left">
+                            <h2>Physical Document Tracking</h2>
+                            <p>Track original document submission and invoice details.</p>
+                        </div>
+                    </div>
+                    <form class="admin-detail-form" id="documentForm">
+                        <div class="form-grid two-col">
+                            <div class="search-field">
+                                <label for="documentReceived">Document Received</label>
+                                <select class="search-select" id="documentReceived">
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
+                            <div class="search-field">
+                                <label for="documentReceivedDate">Received Date</label>
+                                <input class="search-date-input" id="documentReceivedDate" type="datetime-local">
+                            </div>
+                            <div class="search-field detail-span-2">
+                                <label for="invoiceNumber">Invoice / Physical File No</label>
+                                <input class="search-input" id="invoiceNumber" type="text" placeholder="Invoice or physical document number">
+                            </div>
+                        </div>
+                        <div class="detail-form-actions">
+                            <button class="btn-search" type="submit">Update Document</button>
+                        </div>
+                    </form>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-header">
+                        <div class="section-header-left">
+                            <h2>Medical Department Decision</h2>
+                            <p>Record medical recommendation and remarks.</p>
+                        </div>
+                    </div>
+                    <form class="admin-detail-form" id="medicalForm">
+                        <div class="form-grid two-col">
+                            <div class="search-field">
+                                <label for="medicalRecommendation">Recommendation</label>
+                                <select class="search-select" id="medicalRecommendation">
+                                    <option value="PENDING">Pending</option>
+                                    <option value="RECOMMENDED">Recommended</option>
+                                    <option value="NOT_RECOMMENDED">Not Recommended</option>
+                                </select>
+                            </div>
+                            <div class="search-field">
+                                <label for="doctorApprovedDate">Decision Date</label>
+                                <input class="search-date-input" id="doctorApprovedDate" type="date">
+                            </div>
+                            <div class="search-field detail-span-2">
+                                <label for="medicalRemark">Medical Remark</label>
+                                <textarea class="form-textarea" id="medicalRemark" placeholder="Enter medical department remark"></textarea>
+                            </div>
+                        </div>
+                        <div class="detail-form-actions">
+                            <button class="btn-search" type="submit">Update Medical Decision</button>
+                        </div>
+                    </form>
+                </section>
+            </div>
+
+            <section class="section-card">
+                <div class="section-header">
+                    <div class="section-header-left">
+                        <h2>Payment Information</h2>
+                        <p>Update approved amount, payment approval date, paid date, and payment remark.</p>
+                    </div>
+                </div>
+                <form class="admin-detail-form" id="paymentForm">
+                    <div class="form-grid three-col">
+                        <div class="search-field">
+                            <label for="approvedAmount">Approved Amount</label>
+                            <input class="search-input" id="approvedAmount" type="number" min="0" step="0.01" placeholder="0.00">
+                        </div>
+                        <div class="search-field">
+                            <label for="paymentApprovedDate">Payment Approved Date</label>
+                            <input class="search-date-input" id="paymentApprovedDate" type="date">
+                        </div>
+                        <div class="search-field">
+                            <label for="paidDate">Paid Date</label>
+                            <input class="search-date-input" id="paidDate" type="date">
+                        </div>
+                        <div class="search-field detail-span-3">
+                            <label for="paymentRemark">Payment Remark</label>
+                            <textarea class="form-textarea" id="paymentRemark" placeholder="Enter payment remark"></textarea>
+                        </div>
+                    </div>
+                    <div class="detail-form-actions">
+                        <button class="btn-search" type="submit">Update Payment</button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="section-card">
+                <div class="section-header">
+                    <div class="section-header-left">
+                        <h2>Status Update Section</h2>
+                        <p>Move the claim to a new status and save an admin remark.</p>
+                    </div>
+                </div>
+                <form class="admin-detail-form" id="statusUpdateForm">
+                    <div class="form-grid two-col">
+                        <div class="search-field">
+                            <label for="newStatus">New Status</label>
+                            <select class="search-select" id="newStatus">
+                                <option value="">Select New Status</option>
+                            </select>
+                        </div>
+                        <div class="search-field detail-span-2">
+                            <label for="statusRemark">Remark</label>
+                            <textarea class="form-textarea" id="statusRemark" placeholder="Enter reason or update note"></textarea>
+                        </div>
+                    </div>
+                    <div class="detail-form-actions">
+                        <button class="btn-search" type="submit">Update Status</button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="section-card">
+                <div class="section-header">
+                    <div class="section-header-left">
+                        <h2>Status History Timeline</h2>
+                        <p>Track every update made to this claim request.</p>
+                    </div>
+                </div>
+                <div class="status-timeline" id="historyTimeline">
+                    <div class="empty-state">Loading...</div>
+                </div>
+            </section>
         </main>
     </div>
 </div>
-<script src="../assets/js/admin.js?v=20260624-login-fix-2"></script>
+
+<div class="modal-overlay" id="logoutModal" role="dialog" aria-modal="true" aria-labelledby="logoutModalTitle">
+    <div class="modal-box">
+        <span class="modal-icon">!</span>
+        <div class="modal-title" id="logoutModalTitle">Confirm Logout</div>
+        <p class="modal-msg">Are you sure you want to logout from the admin panel?</p>
+        <div class="modal-btn-row">
+            <button class="btn-modal btn-modal-danger" id="confirmLogoutBtn">Yes, Logout</button>
+            <button class="btn-modal btn-modal-outline" id="cancelLogoutBtn">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script src="../assets/js/admin.js?v=20260701-change-password-1"></script>
 </body>
 </html>

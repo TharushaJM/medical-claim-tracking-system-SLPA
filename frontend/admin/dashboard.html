@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <meta name="description" content="Admin Dashboard – Wellness Center Medical Claim Registration and Tracking System for Sri Lanka Port Employees.">
     <title>Admin Dashboard | SLPA Wellness Center</title>
 
@@ -12,7 +15,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Admin Stylesheet -->
-    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="../assets/css/admin.css?v=20260701-change-password-1">
+    <style>.admin-app .topbar-search,.admin-app .topbar-icon-btn{display:none!important;}</style>
 </head>
 <body>
 
@@ -24,8 +28,8 @@
     <aside class="sidebar" id="sidebar">
 
         <!-- Brand -->
-        <div class="sidebar-brand">
-            <div class="brand-name">⚕️ SLPA Wellness</div>
+        <div class="sidebar-brand sidebar-brand-logo">
+            <img src="slpa-logo-transparent.png" alt="Sri Lanka Ports Authority" class="sidebar-logo">
             <div class="brand-role">Admin Console</div>
         </div>
 
@@ -34,29 +38,29 @@
             <div class="nav-section-label">Main Menu</div>
 
             <button class="nav-item active" id="nav-dashboard" data-page="dashboard">
-                <span class="nav-icon">📊</span>
+                <span class="nav-icon">D</span>
                 Dashboard
             </button>
 
             <button class="nav-item" id="nav-claims" data-page="claims">
-                <span class="nav-icon">📋</span>
+                <span class="nav-icon">C</span>
                 All Claims
             </button>
 
             <button class="nav-item" id="nav-details" data-page="details">
-                <span class="nav-icon">🔍</span>
+                <span class="nav-icon">V</span>
                 Claim Details
             </button>
 
             <div class="nav-section-label" style="margin-top:8px;">Management</div>
 
             <button class="nav-item" id="nav-reports" data-page="reports">
-                <span class="nav-icon">📈</span>
+                <span class="nav-icon">R</span>
                 Reports
             </button>
 
             <button class="nav-item" id="nav-settings" data-page="settings">
-                <span class="nav-icon">⚙️</span>
+                <span class="nav-icon">S</span>
                 Settings
             </button>
         </nav>
@@ -64,7 +68,7 @@
         <!-- Logout -->
         <div class="sidebar-footer">
             <button class="nav-item" id="logoutBtn">
-                <span class="nav-icon">🚪</span>
+                <span class="nav-icon">L</span>
                 Logout
             </button>
         </div>
@@ -81,32 +85,27 @@
         <!-- ---- TOP NAVBAR ---- -->
         <header class="topbar">
             <!-- Mobile hamburger -->
-            <button class="topbar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+            <button class="topbar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">&#9776;</button>
 
             <!-- Page title -->
             <span class="topbar-title" id="topbarTitle">Admin Dashboard</span>
 
-            <!-- Search bar -->
-            <div class="topbar-search">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="topbarSearch" placeholder="Quick search…" autocomplete="off">
-            </div>
-
-            <!-- Action icons -->
-            <div class="topbar-actions">
-                <button class="topbar-icon-btn" title="Notifications" aria-label="Notifications">
-                    🔔
-                    <span class="notif-badge">3</span>
-                </button>
-                <button class="topbar-icon-btn" title="Refresh data" id="refreshBtn" aria-label="Refresh">🔄</button>
-            </div>
+            <div class="topbar-clock" id="adminClock" aria-label="Current time">--:-- --</div>
 
             <!-- Profile -->
-            <div class="topbar-profile" id="profileBtn" title="Admin profile">
-                <div class="topbar-avatar">A</div>
-                <div class="topbar-profile-text">
-                    <div class="profile-name">Welcome, Admin</div>
-                    <div class="profile-role">Wellness Admin</div>
+            <div class="profile-menu">
+                <button class="topbar-profile" id="profileBtn" type="button" aria-haspopup="true" aria-expanded="false" title="Admin profile">
+                    <div class="topbar-avatar">A</div>
+                    <div class="topbar-profile-text">
+                        <div class="profile-name">Welcome, Admin</div>
+                        <div class="profile-role">Wellness Admin</div>
+                    </div>
+                    <span class="profile-chevron">⌄</span>
+                </button>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <button type="button" class="profile-menu-item" id="viewProfileBtn">View Profile</button>
+                    <button type="button" class="profile-menu-item" id="changePasswordBtn">Change Password</button>
+                    <button type="button" class="profile-menu-item danger" id="profileLogoutBtn">Logout</button>
                 </div>
             </div>
         </header>
@@ -196,7 +195,7 @@
 
                     <!-- Buttons -->
                     <div class="search-btn-row">
-                        <button class="btn-search" id="searchBtn">🔍 Open in All Claims</button>
+                        <button class="btn-search" id="searchBtn">Open in All Claims</button>
                         <button class="btn-reset" id="resetBtn">Reset</button>
                     </div>
                 </div>
@@ -266,7 +265,7 @@
                 <!-- Bar Chart – Claims by Status -->
                 <div class="section-card">
                     <div class="chart-container">
-                        <div class="chart-title">📊 Claims by Status</div>
+                        <div class="chart-title">Claims by Status</div>
                         <div class="bar-chart" id="statusBarChart">
                             <!-- Rendered by JS -->
                         </div>
@@ -318,7 +317,7 @@
 <!-- ========== LOGOUT CONFIRM MODAL ========== -->
 <div class="modal-overlay" id="logoutModal" role="dialog" aria-modal="true" aria-labelledby="logoutModalTitle">
     <div class="modal-box">
-        <span class="modal-icon">🚪</span>
+        <span class="modal-icon">!</span>
         <div class="modal-title" id="logoutModalTitle">Confirm Logout</div>
         <p class="modal-msg">Are you sure you want to logout from the admin panel?</p>
         <div class="modal-btn-row">
@@ -344,7 +343,7 @@
 <!-- ========== SEARCH RESULT MODAL ========== -->
 <div class="modal-overlay" id="searchResultModal" role="dialog" aria-modal="true" aria-labelledby="searchResultModalTitle">
     <div class="modal-box" style="max-width:540px;">
-        <span class="modal-icon" id="searchResultIcon">🔍</span>
+        <span class="modal-icon" id="searchResultIcon">!</span>
         <div class="modal-title" id="searchResultModalTitle">Search Results</div>
         <p class="modal-msg" id="searchResultMsg"></p>
         <div class="modal-btn-row">
@@ -355,7 +354,7 @@
 
 
 <!-- Admin JS -->
-<script src="../assets/js/admin.js?v=20260624-login-fix-2"></script>
+<script src="../assets/js/admin.js?v=20260701-change-password-1"></script>
 
 </body>
 </html>

@@ -17,12 +17,14 @@
     <style>
         :root { --navy:#113a63; --navy-dark:#0c2d4e; --gold:#eca91c; --ink:#1e2d3d; --muted:#687584; --line:#d9dfe5; --bg:#f6f7f8; }
         * { box-sizing:border-box; }
-        body { margin:0; min-height:100vh; background:var(--bg); color:var(--ink); font-family:Arial, Helvetica, sans-serif; }
+        body { position:relative; isolation:isolate; margin:0; min-height:100vh; background:#dbe6eb; color:var(--ink); font-family:Arial, Helvetica, sans-serif; }
+        body::before { content:""; position:fixed; z-index:-2; inset:-8px; background:url("port-background.png") center 62%/cover no-repeat; filter:blur(2px); opacity:.82; transform:scale(1.015); }
+        body::after { content:""; position:fixed; z-index:-1; inset:0; background:rgba(236,243,245,.22); }
         .portal-top { height:29px; background:#fff; border-top:3px solid #333; border-bottom:1px solid #d9d9d9; color:#52606d; font-size:12px; }
         .portal-wrap { width:min(1200px, calc(100% - 40px)); margin:auto; }
         .portal-top .portal-wrap { display:flex; align-items:center; justify-content:space-between; height:100%; }
         .portal-contact { display:flex; gap:22px; } .portal-help { color:#25445e; font-weight:bold; }
-        .brand-row { height:83px; display:flex; align-items:center; background:#fff; }
+        .brand-row { height:83px; display:flex; align-items:center; background:rgba(255,255,255,.91); backdrop-filter:blur(4px); }
         .brand { display:flex; align-items:center; }
         .slpa-logo { display:block; width:230px; max-width:100%; height:auto; }
         .main-nav { height:50px; background:#303030; box-shadow:0 1px 2px #aaa; }
@@ -31,22 +33,22 @@
         .nav-link:hover,.nav-link.active { color:var(--gold); background:#383838; }
         .nav-admin { margin-left:auto; min-width:204px; border:0; background:var(--gold); color:#182430; font-size:14px; font-weight:bold; letter-spacing:.6px; }
         .nav-admin span { margin-right:8px; }
-        .portal-main { min-height:calc(100vh - 162px); padding:57px 0 40px; }
-        .hero-grid { display:grid; grid-template-columns:minmax(0, 1fr) 438px; gap:64px; align-items:start; }
-        .intro { padding-top:2px; }
+        .portal-main { min-height:calc(100vh - 162px); padding:64px 0 54px; background:rgba(246,248,249,.38); backdrop-filter:blur(1px); }
+        .hero-grid { display:grid; grid-template-columns:minmax(0, 1fr) 438px; gap:72px; align-items:start; }
+        .intro { padding:12px 4px; }
         .intro h1 { margin:0; font-size:29px; line-height:1.17; letter-spacing:.2px; font-weight:700; }
         .gold-line { width:50px; height:3px; margin:14px 0 21px; background:var(--gold); }
         .intro > p { margin:0 0 33px; color:#5f6872; font-size:15px; line-height:1.8; }
         .benefits { display:grid; gap:13px; max-width:700px; }
-        .benefit { min-height:73px; display:flex; align-items:center; gap:17px; padding:12px 20px 12px 17px; border:1px solid #e1e4e8; border-left:4px solid var(--gold); border-radius:3px; background:#fff; box-shadow:0 1px 2px rgba(0,0,0,.02); }
+        .benefit { min-height:76px; display:flex; align-items:center; gap:17px; padding:14px 22px 14px 17px; border:1px solid rgba(216,223,228,.92); border-left:4px solid var(--gold); border-radius:3px; background:rgba(255,255,255,.91); box-shadow:0 2px 6px rgba(18,43,59,.08); }
         .benefit-icon { flex:0 0 43px; height:43px; display:grid; place-items:center; border-radius:6px; background:#f0f4f7; color:var(--navy); font-size:21px; }
         .benefit strong { display:block; margin-bottom:4px; font-size:15px; color:#173a5d; }.benefit span { color:#68717a; font-size:13px; }
-        .access-card { overflow:hidden; background:#fff; border-radius:4px; box-shadow:0 2px 10px rgba(0,0,0,.17); }
+        .access-card { overflow:hidden; background:rgba(255,255,255,.94); border-radius:5px; box-shadow:0 10px 28px rgba(18,43,59,.24); backdrop-filter:blur(8px); }
         .access-card-head { display:flex; align-items:center; gap:14px; padding:22px 29px 20px; border-top:5px solid var(--navy); border-bottom:3px solid #8ba0ad; }
         .access-icon { width:46px; height:46px; display:grid; place-items:center; border-radius:6px; background:var(--navy); color:var(--gold); font-size:25px; }
         .access-card-head h2 { margin:0 0 3px; color:#163c62; font-size:19px; }.access-card-head p { margin:0; color:#78828c; font-size:13px; }
-        .login-form { padding:26px 29px 22px; }.form-group { margin-bottom:18px; }.form-label { display:block; margin-bottom:9px; color:#303842; font-size:13px; font-weight:bold; }
-        .required { color:#d64a3c; }.input-wrap { position:relative; }.input-icon { position:absolute; left:15px; top:50%; transform:translateY(-50%); color:#87929a; font-size:17px; }.form-input { width:100%; height:47px; padding:0 45px; border:1px solid #d5d9dc; border-radius:2px; background:#fff; color:#28333e; font-size:14px; outline:none; }.form-input:focus { border-color:var(--navy); box-shadow:0 0 0 2px rgba(17,58,99,.12); }.toggle-password { position:absolute; right:10px; top:50%; transform:translateY(-50%); border:0; background:transparent; color:#687784; cursor:pointer; font-size:16px; }.login-options { display:flex; align-items:center; justify-content:space-between; margin:-1px 0 18px; color:#65707a; font-size:12px; }.remember-wrap { display:flex; align-items:center; gap:6px; }.forgot-link { padding:0; border:0; background:transparent; color:#416888; font-size:12px; cursor:pointer; }.btn-login { width:100%; height:49px; border:0; border-radius:2px; background:var(--navy); color:#fff; font-size:14px; font-weight:bold; letter-spacing:.2px; cursor:pointer; }.btn-login:hover { background:var(--navy-dark); }.btn-login span { margin-right:7px; }.demo-note { margin:18px 0 0; color:#78818a; text-align:center; font-size:11px; line-height:1.55; }.notice { display:flex; gap:9px; margin:0 29px 25px; padding:12px 13px; border:1px solid #f1d98a; border-radius:2px; background:#fffbed; color:#846a21; font-size:12px; line-height:1.35; }.field-error { display:none; margin-top:5px; color:#bf3026; font-size:11px; }
+        .login-form { padding:29px 35px 24px; }.form-group { margin-bottom:19px; }.form-label { display:block; margin-bottom:9px; color:#303842; font-size:13px; font-weight:bold; }
+        .required { color:#d64a3c; }.input-wrap { position:relative; }.input-icon { position:absolute; left:15px; top:50%; transform:translateY(-50%); color:#87929a; font-size:17px; }.form-input { width:100%; height:47px; padding:0 45px; border:1px solid #d5d9dc; border-radius:2px; background:#fff; color:#28333e; font-size:14px; outline:none; }.form-input:focus { border-color:var(--navy); box-shadow:0 0 0 2px rgba(17,58,99,.12); }.toggle-password { position:absolute; right:10px; top:50%; transform:translateY(-50%); border:0; background:transparent; color:#687784; cursor:pointer; font-size:16px; }.login-options { display:flex; align-items:center; justify-content:space-between; margin:-1px 0 18px; color:#65707a; font-size:12px; }.remember-wrap { display:flex; align-items:center; gap:6px; }.forgot-link { padding:0; border:0; background:transparent; color:#416888; font-size:12px; cursor:pointer; }.btn-login { width:100%; height:49px; border:0; border-radius:2px; background:var(--navy); color:#fff; font-size:14px; font-weight:bold; letter-spacing:.2px; cursor:pointer; }.btn-login:hover { background:var(--navy-dark); }.btn-login span { margin-right:7px; }.demo-note { margin:18px 0 0; color:#78818a; text-align:center; font-size:11px; line-height:1.55; }.notice { display:flex; gap:9px; margin:0 35px 29px; padding:13px 14px; border:1px solid #f1d98a; border-radius:2px; background:rgba(255,251,237,.92); color:#846a21; font-size:12px; line-height:1.35; }.field-error { display:none; margin-top:5px; color:#bf3026; font-size:11px; }
         .modal-overlay { display:none; position:fixed; inset:0; z-index:20; align-items:center; justify-content:center; padding:20px; background:rgba(8,22,36,.55); }.modal-overlay.active { display:flex; }.modal-box { width:min(410px, 100%); padding:28px; border-radius:5px; background:#fff; text-align:center; box-shadow:0 12px 35px rgba(0,0,0,.25); }.modal-icon { display:block; margin-bottom:12px; font-size:35px; }.modal-title { margin-bottom:10px; color:#1b2f42; font-size:20px; font-weight:bold; }.modal-msg { color:#657482; font-size:14px; line-height:1.5; }.modal-btn-row { margin-top:20px; }.btn-modal { min-width:130px; padding:11px 17px; border:0; border-radius:3px; background:var(--navy); color:#fff; font-weight:bold; cursor:pointer; }.btn-modal-outline { background:#fff; border:1px solid #a5b0b9; color:#405162; }
         @media (max-width:850px) { .portal-wrap { width:min(100% - 28px, 600px); }.hero-grid { grid-template-columns:1fr; gap:35px; }.portal-main { padding-top:35px; }.access-card { max-width:440px; }.main-nav .nav-link { display:none; }.main-nav .nav-link:first-child { display:block; }.nav-admin { margin-left:auto; }.brand-row { height:70px; } }
         @media (max-width:480px) { .portal-contact { gap:8px; }.portal-contact span:nth-child(2) { display:none; }.portal-top { font-size:10px; }.intro h1 { font-size:25px; }.access-card-head,.login-form { padding-left:20px; padding-right:20px; }.notice { margin-left:20px; margin-right:20px; }.nav-admin { min-width:165px; }.benefit { padding-right:12px; } }
@@ -67,7 +69,8 @@
                 <div class="form-group"><label class="form-label" for="adminUsername">USERNAME <span class="required">*</span></label><div class="input-wrap"><span class="input-icon">♙</span><input class="form-input" type="text" id="adminUsername" placeholder="Enter your username" autocomplete="username" maxlength="80" required></div><span class="field-error" id="usernameError">Please enter your username.</span></div>
                 <div class="form-group"><label class="form-label" for="adminPassword">PASSWORD <span class="required">*</span></label><div class="input-wrap"><span class="input-icon">▣</span><input class="form-input" type="password" id="adminPassword" placeholder="Enter your password" autocomplete="current-password" maxlength="120" required><button type="button" class="toggle-password" id="togglePassword" aria-label="Toggle password visibility" title="Show or hide password">◉</button></div><span class="field-error" id="passwordError">Please enter your password.</span></div>
                 <div class="login-options"><label class="remember-wrap"><input type="checkbox" id="rememberMe"> Remember me</label><button type="button" class="forgot-link" id="forgotPasswordBtn">Forgot password?</button></div>
-                <button type="submit" class="btn-login" id="loginBtn"><span>⌕</span>LOGIN TO DASHBOARD</button><p class="demo-note">Authorized Personnel Only.<br>Username: <strong>admin</strong> &nbsp; Password: <strong>Admin@123</strong></p>
+                <button type="submit" class="btn-login" id="loginBtn"><span>⌕</span>LOGIN TO DASHBOARD</button>
+                <p class="demo-note">Authorized Personnel Only.</p>
             </form>
             <div class="notice"><span>ⓘ</span><span>Use your approved administrator account to access claim records and payment information.</span></div>
         </section>
